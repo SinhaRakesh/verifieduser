@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const db = require("../config/pgdb");
-const dayjs = require("dayjs");
+const moment = require("moment");
 
 const defaultFilePath = path.join(
   __dirname,
@@ -10,16 +10,21 @@ const defaultFilePath = path.join(
 
 // Function to format date
 const formatDate = (dateString) => {
-  const formats = ["DD-MM-YYYY", "DD MMM YYYY"];
+  const possibleFormats = [
+    "DD-MM-YYYY",
+    "DD/MM/YYYY",
+    "DD MM YYYY",
+    "MM-DD-YYYY",
+    "YYYY-MM-DD",
+    "YYYY/MM/DD",
+  ];
 
-  for (const format of formats) {
-    const parsedDate = dayjs(dateString, format, true); // Strict parsing
-    if (parsedDate.isValid()) {
-      return parsedDate.format("YYYY-MM-DD"); // Convert to YYYY-MM-DD
-    }
+  const formattedDate2 = moment(dateString, possibleFormats, true);
+  if (formattedDate2.isValid()) {
+    return formattedDate2.format("YYYY-MM-DD");
   }
 
-  return dateString; // Return original
+  return dateString;
 };
 
 const normalizeData = async function (inputString) {
@@ -57,11 +62,11 @@ const readAndNormalizeData = async function (filePath = null) {
     const line = lines[i].trim();
     if (line) {
       const normalizedEntry = await normalizeData(line);
-      console.log(normalizedEntry);
       if (normalizedEntry) normalizedData.push(normalizedEntry);
     }
   }
-  console.log("normalizedData", normalizedData.length);
+
+  //write into db
   if (normalizedData.length) {
     try {
       // Bulk insert normalized data into the database
@@ -76,10 +81,9 @@ const readAndNormalizeData = async function (filePath = null) {
       RETURNING *;
     `;
       const result = await db.query(insertQuery);
-      res.send("Inserted data:", result.rows);
+      result.rows;
     } catch (err) {
       console.error(err);
-      res.status(500).send("Server error");
     }
   }
 

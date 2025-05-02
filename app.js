@@ -7,8 +7,7 @@ var logger = require("morgan");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 const authMiddleware = require("./middleware/auth");
-const dayjs = require("dayjs");
-const moment = require("moment");
+// const moment = require("moment");
 
 var app = express();
 
@@ -41,22 +40,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
-console.log("hello");
-const dateString = "24-12-1983";
-
-const possibleFormats = [
-  "DD-MM-YYYY",
-  "DD/MM/YYYY",
-  "DD MM YYYY",
-  "MM-DD-YYYY",
-  "YYYY-MM-DD",
-  "YYYY/MM/DD",
-];
-
-const formattedDate2 = moment(dateString, possibleFormats, true);
-if (formattedDate2.isValid()) {
-  console.log(formattedDate2.format("YYYY-MM-DD"));
-}
 
 module.exports = app;
