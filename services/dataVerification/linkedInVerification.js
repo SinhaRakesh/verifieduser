@@ -1,7 +1,7 @@
 // todo add linkedin api to get detail of user is verified or not
-const linkedinVerification = function (mobileNo) {
+const linkedinVerification = function linkedinVerification(mobileNo) {
   // todo call mobile verification from caller or check dnd activated or not
-  return true;
+  return Math.random() < 0.5;
 };
 
-module.exports = linkedinVerification();
+module.exports = linkedinVerification;

@@ -1,7 +1,7 @@
 // todo add api call for email verification
-const mobileVerification = function (mobileNo) {
-  // todo call mobile verification from caller or check dnd activated or not
-  return true;
+const mobileVerification = function mobileVerification(mobileNo) {
+  // todo call mobile verification from caller or check DND activated or not
+  return Math.random() < 0.5;
 };
 
-module.exports = mobileVerification();
+module.exports = mobileVerification;
